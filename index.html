@@ -96,6 +96,20 @@
     .cta:hover { background: #16281e; }
     .cta svg { width: 18px; height: 18px; }
     .cta-note { display: block; margin-top: 12px; font-size: 13px; color: var(--muted); }
+    /* Pre-launch: non-clickable "coming soon" version of the CTA */
+    .cta.soon {
+      background: transparent;
+      border: 1.5px solid var(--line);
+      color: var(--green);
+      cursor: default;
+    }
+    .cta.soon:hover { background: transparent; }
+    .band .cta.soon {
+      border-color: rgba(244, 240, 230, 0.4);
+      color: var(--cream);
+      background: transparent;
+    }
+    .header-soon { font-size: 14px; font-weight: 600; margin-left: 22px; color: var(--muted); }
 
     /* Features */
     .features { border-top: 1px solid var(--line); padding: 56px 0; }
@@ -180,7 +194,7 @@
       <nav>
         <a href="#features">Features</a>
         <a href="support.html">Support</a>
-        <a class="header-cta" href="https://apps.apple.com/app/id6767834305">Get the app</a>
+        <span class="header-cta header-soon">Coming soon</span>
       </nav>
     </header>
 
@@ -188,10 +202,11 @@
       <span class="label">Your cooking journal</span>
       <h1>The recipes you <span class="plain">actually</span> cook.</h1>
       <p>Keep them in one place — with your own photos, notes, and ratings. Not a feed of things you'll never make.</p>
-      <a class="cta" href="https://apps.apple.com/app/id6767834305">
+      <span class="cta soon">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c-1.3.1-2.9.9-3.8 2-.8.9-1.5 2.4-1.3 3.8 1.5.1 3-.8 3.9-1.9.8-1 1.4-2.4 1.2-3.9zM20 17.1c-.5 1.2-.8 1.8-1.5 2.9-1 1.5-2.4 3.4-4.1 3.4-1.5 0-1.9-1-4-1-2 0-2.5 1-4 1-1.7 0-3-1.7-4-3.2C-.3 17-.6 11.4 1.6 8.6c.9-1.3 2.5-2.1 4-2.1 1.6 0 2.6 1 4 1 1.3 0 2-1 3.9-1 1.4 0 2.9.8 3.9 2.1-3.4 1.9-2.8 6.7 2.7 8.5z"/></svg>
-        Get it on the App Store
-      </a>
+        Coming soon to the App Store
+      </span>
+      <span class="cta-note">iOS — launching soon.</span>
     </section>
 
     <section class="features" id="features">
@@ -227,10 +242,10 @@
 
     <section class="band">
       <h2>Start keeping the recipes you'll cook again.</h2>
-      <a class="cta" href="https://apps.apple.com/app/id6767834305">
+      <span class="cta soon">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c-1.3.1-2.9.9-3.8 2-.8.9-1.5 2.4-1.3 3.8 1.5.1 3-.8 3.9-1.9.8-1 1.4-2.4 1.2-3.9zM20 17.1c-.5 1.2-.8 1.8-1.5 2.9-1 1.5-2.4 3.4-4.1 3.4-1.5 0-1.9-1-4-1-2 0-2.5 1-4 1-1.7 0-3-1.7-4-3.2C-.3 17-.6 11.4 1.6 8.6c.9-1.3 2.5-2.1 4-2.1 1.6 0 2.6 1 4 1 1.3 0 2-1 3.9-1 1.4 0 2.9.8 3.9 2.1-3.4 1.9-2.8 6.7 2.7 8.5z"/></svg>
-        Get it on the App Store
-      </a>
+        Coming soon to the App Store
+      </span>
     </section>
 
     <footer>
