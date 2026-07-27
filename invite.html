@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-itunes-app" content="app-id=6767834305" />
+  <title>You're invited to Fork'd</title>
+  <style>
+    :root {
+      --bg: #F4F0E6;
+      --green: #1E3A2B;
+      --lime: #C5D62A;
+      --muted: rgba(30, 58, 43, 0.6);
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--green);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+    }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      max-width: 360px;
+      width: 100%;
+      text-align: center;
+    }
+    .logo {
+      font-family: "Times New Roman", Georgia, serif;
+      font-style: italic;
+      font-weight: 900;
+      font-size: 48px;
+      color: var(--green);
+      margin: 0 0 12px;
+      letter-spacing: -1px;
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      margin: 32px 0 8px;
+    }
+    p {
+      font-size: 15px;
+      color: var(--muted);
+      margin: 0 0 32px;
+      line-height: 1.5;
+    }
+    .btn-primary {
+      display: block;
+      background: var(--green);
+      color: var(--bg);
+      text-decoration: none;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+    .btn-secondary {
+      display: block;
+      background: transparent;
+      color: var(--green);
+      text-decoration: none;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-weight: 500;
+      font-size: 15px;
+      border: 1.5px solid rgba(30, 58, 43, 0.2);
+    }
+    .small {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2 class="logo">Fork'd</h2>
+    <h1>You're invited</h1>
+    <p>Tap below to open the app and connect.</p>
+    <a class="btn-primary" id="open-app" href="#">Open in Fork'd</a>
+    <a class="btn-secondary" href="https://apps.apple.com/app/id6767834305">Get the app</a>
+    <p class="small">No app yet? Install Fork'd, sign up, then re-tap this link.</p>
+  </div>
+  <script>
+    (function () {
+      var params = new URLSearchParams(location.search);
+      var userId = (params.get('u') || '').trim();
+      // Only valid-looking UUIDs pass through — defends against random query
+      // params being shoved into the deep link.
+      var UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      if (!UUID_RE.test(userId)) {
+        document.getElementById('open-app').style.display = 'none';
+        return;
+      }
+      var deepLink = 'seasonalkitchen://invite/' + userId;
+      document.getElementById('open-app').setAttribute('href', deepLink);
+      // Auto-attempt the deep link on iOS. If the app is installed iOS
+      // shows "Open in Fork'd?"; if not, nothing happens and the user sees
+      // the visible buttons.
+      setTimeout(function () { window.location.href = deepLink; }, 250);
+    })();
+  </script>
+</body>
+</html>
