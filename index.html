@@ -4,53 +4,244 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Fork'd — your cooking journal</title>
+  <meta name="description" content="Fork'd is a cooking journal. Keep the recipes you actually cook — with your own photos, notes, and ratings." />
+  <meta name="apple-itunes-app" content="app-id=6767834305" />
   <style>
+    :root {
+      --cream: #F4F0E6;
+      --green: #1E3A2B;
+      --lime: #C5D62A;
+      --muted: rgba(30, 58, 43, 0.62);
+      --line: rgba(30, 58, 43, 0.12);
+    }
+    * { box-sizing: border-box; }
     html, body {
       margin: 0;
       padding: 0;
-      background: #F4F0E6;
-      color: #1E3A2B;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      min-height: 100vh;
+      background: var(--cream);
+      color: var(--green);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
     }
-    body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      text-align: center;
-    }
-    h1 {
+    .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+    .wordmark {
       font-family: "Times New Roman", Georgia, serif;
       font-style: italic;
       font-weight: 900;
-      font-size: 64px;
-      letter-spacing: -1.5px;
-      margin: 0 0 16px;
+      letter-spacing: -1px;
+      color: var(--green);
     }
-    p {
-      font-size: 16px;
-      color: rgba(30, 58, 43, 0.65);
-      max-width: 320px;
-      line-height: 1.5;
+    .label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
     }
-    a {
-      display: inline-block;
-      margin-top: 24px;
-      background: #1E3A2B;
-      color: #F4F0E6;
+
+    /* Top bar */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 0;
+    }
+    header .wordmark { font-size: 26px; }
+    header nav a {
+      color: var(--green);
       text-decoration: none;
-      padding: 14px 22px;
-      border-radius: 12px;
+      font-size: 14px;
       font-weight: 600;
+      margin-left: 22px;
+      opacity: 0.75;
+    }
+    header nav a:hover { opacity: 1; }
+
+    /* Hero */
+    .hero { padding: 56px 0 64px; max-width: 680px; }
+    .hero h1 {
+      font-family: "Times New Roman", Georgia, serif;
+      font-style: italic;
+      font-weight: 900;
+      font-size: clamp(48px, 9vw, 92px);
+      letter-spacing: -2px;
+      line-height: 0.98;
+      margin: 14px 0 0;
+    }
+    .hero h1 .plain {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-style: normal;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+    }
+    .hero p {
+      font-size: clamp(17px, 2.4vw, 21px);
+      color: var(--muted);
+      margin: 22px 0 32px;
+      max-width: 520px;
+    }
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: var(--green);
+      color: var(--cream);
+      text-decoration: none;
+      padding: 15px 24px;
+      border-radius: 13px;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .cta:hover { background: #16281e; }
+    .cta svg { width: 18px; height: 18px; }
+    .cta-note { display: block; margin-top: 12px; font-size: 13px; color: var(--muted); }
+
+    /* Features */
+    .features { border-top: 1px solid var(--line); padding: 56px 0; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px 48px;
+      margin-top: 32px;
+    }
+    .feature .icon {
+      width: 42px; height: 42px;
+      border-radius: 11px;
+      background: var(--lime);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+    }
+    .feature .icon svg { width: 21px; height: 21px; stroke: var(--green); }
+    .feature h3 { font-size: 19px; font-weight: 700; margin: 0 0 6px; }
+    .feature p { font-size: 15px; color: var(--muted); margin: 0; }
+
+    /* Seasonal accent band */
+    .band {
+      background: var(--green);
+      color: var(--cream);
+      border-radius: 20px;
+      padding: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .band h2 {
+      font-family: "Times New Roman", Georgia, serif;
+      font-style: italic;
+      font-weight: 900;
+      font-size: clamp(26px, 4vw, 36px);
+      letter-spacing: -1px;
+      margin: 0;
+      max-width: 520px;
+      line-height: 1.1;
+    }
+    .band .cta { background: var(--lime); color: var(--green); }
+    .band .cta:hover { background: #b6c625; }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--line);
+      margin-top: 56px;
+      padding: 32px 0 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    footer .wordmark { font-size: 22px; }
+    footer nav a {
+      color: var(--green);
+      text-decoration: none;
+      font-size: 14px;
+      margin-left: 20px;
+      opacity: 0.7;
+    }
+    footer nav a:first-child { margin-left: 0; }
+    footer nav a:hover { opacity: 1; }
+
+    @media (max-width: 620px) {
+      header nav a:not(.header-cta) { display: none; }
+      .grid { grid-template-columns: 1fr; gap: 32px; }
+      .band { padding: 28px; }
+      footer { flex-direction: column; align-items: flex-start; }
+      footer nav a { margin-left: 0; margin-right: 20px; }
     }
   </style>
 </head>
 <body>
-  <div>
-    <h1>Fork'd</h1>
-    <p>Your private cooking journal.<br />Snap, save, remember.</p>
-    <a href="https://apps.apple.com/app/id6767834305">Get the app</a>
+  <div class="wrap">
+
+    <header>
+      <span class="wordmark">Fork'd</span>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="support.html">Support</a>
+        <a class="header-cta" href="https://apps.apple.com/app/id6767834305">Get the app</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <span class="label">Your cooking journal</span>
+      <h1>The recipes you <span class="plain">actually</span> cook.</h1>
+      <p>Keep them in one place — with your own photos, notes, and ratings. Not a feed of things you'll never make.</p>
+      <a class="cta" href="https://apps.apple.com/app/id6767834305">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c-1.3.1-2.9.9-3.8 2-.8.9-1.5 2.4-1.3 3.8 1.5.1 3-.8 3.9-1.9.8-1 1.4-2.4 1.2-3.9zM20 17.1c-.5 1.2-.8 1.8-1.5 2.9-1 1.5-2.4 3.4-4.1 3.4-1.5 0-1.9-1-4-1-2 0-2.5 1-4 1-1.7 0-3-1.7-4-3.2C-.3 17-.6 11.4 1.6 8.6c.9-1.3 2.5-2.1 4-2.1 1.6 0 2.6 1 4 1 1.3 0 2-1 3.9-1 1.4 0 2.9.8 3.9 2.1-3.4 1.9-2.8 6.7 2.7 8.5z"/></svg>
+        Get it on the App Store
+      </a>
+    </section>
+
+    <section class="features" id="features">
+      <span class="label">What it does</span>
+      <div class="grid">
+
+        <div class="feature">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+          <h3>Log what you cook</h3>
+          <p>Snap a photo, add a note and a rating, and it's saved with the date. Your own record, not a review site.</p>
+        </div>
+
+        <div class="feature">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
+          <h3>Save from anywhere</h3>
+          <p>Paste a recipe, a link, or an Instagram post. Fork'd pulls out the ingredients and steps so you're not scrolling past a life story.</p>
+        </div>
+
+        <div class="feature">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></div>
+          <h3>Cook what's in season</h3>
+          <p>Suggestions based on what's actually growing where you are, so dinner starts with something worth cooking.</p>
+        </div>
+
+        <div class="feature">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <h3>Cook together</h3>
+          <p>Share a recipe with the people you cook with and keep the notes on it in one shared place.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="band">
+      <h2>Start keeping the recipes you'll cook again.</h2>
+      <a class="cta" href="https://apps.apple.com/app/id6767834305">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c-1.3.1-2.9.9-3.8 2-.8.9-1.5 2.4-1.3 3.8 1.5.1 3-.8 3.9-1.9.8-1 1.4-2.4 1.2-3.9zM20 17.1c-.5 1.2-.8 1.8-1.5 2.9-1 1.5-2.4 3.4-4.1 3.4-1.5 0-1.9-1-4-1-2 0-2.5 1-4 1-1.7 0-3-1.7-4-3.2C-.3 17-.6 11.4 1.6 8.6c.9-1.3 2.5-2.1 4-2.1 1.6 0 2.6 1 4 1 1.3 0 2-1 3.9-1 1.4 0 2.9.8 3.9 2.1-3.4 1.9-2.8 6.7 2.7 8.5z"/></svg>
+        Get it on the App Store
+      </a>
+    </section>
+
+    <footer>
+      <span class="wordmark">Fork'd</span>
+      <nav>
+        <a href="support.html">Support</a>
+        <a href="https://lavender-christian-2.tiiny.site">Privacy</a>
+        <a href="mailto:<placeholder_email_address>">Contact</a>
+      </nav>
+    </footer>
+
   </div>
 </body>
 </html>
