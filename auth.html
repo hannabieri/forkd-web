@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex" />
+  <title>Fork'd</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <style>
+    :root {
+      --bg: #F4F0E6;
+      --green: #1E3A2B;
+      --lime: #C5D62A;
+      --muted: rgba(30, 58, 43, 0.6);
+      --error: #A23B2A;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--green);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      line-height: 1.55;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      padding: 48px 24px;
+    }
+    .card { max-width: 480px; width: 100%; }
+    .logo {
+      font-family: "Times New Roman", Georgia, serif;
+      font-style: italic;
+      font-weight: 900;
+      font-size: 44px;
+      color: var(--green);
+      margin: 0 0 32px;
+      letter-spacing: -1px;
+    }
+    h2 { font-size: 22px; font-weight: 600; margin: 0 0 8px; }
+    p { font-size: 15px; margin: 0 0 16px; }
+    a { color: var(--green); font-weight: 600; }
+    .btn {
+      display: inline-block;
+      background: var(--green);
+      color: var(--bg);
+      text-decoration: none;
+      border: 0;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 16px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    .btn:disabled { opacity: 0.5; cursor: default; }
+    label { display: block; font-size: 13px; font-weight: 600; margin: 16px 0 6px; }
+    input {
+      width: 100%;
+      font: inherit;
+      font-size: 16px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(30, 58, 43, 0.25);
+      background: #fff;
+      color: var(--green);
+    }
+    form .btn { margin-top: 20px; width: 100%; }
+    .error { color: var(--error); font-size: 14px; margin: 12px 0 0; min-height: 1em; }
+    .small { font-size: 13px; color: var(--muted); margin-top: 40px; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <!--
+    Landing page for the links in Fork'd auth emails (Supabase Site URL points here).
+    Supabase verifies the link, then redirects with the result in the URL fragment:
+      #access_token=…&type=signup     → email confirmed
+      #access_token=…&type=recovery   → let the user set a new password
+      #error=…&error_code=otp_expired → link expired or already used
+    The key below is the public anon key the app already ships with; Row Level Security protects data.
+  -->
+  <div class="card">
+    <h1 class="logo">Fork'd</h1>
+
+    <section id="confirmed" hidden>
+      <h2>Email confirmed</h2>
+      <p>You're all set. Open fork'd and sign in.</p>
+      <a class="btn" href="seasonalkitchen://">Open fork'd</a>
+    </section>
+
+    <section id="reset" hidden>
+      <h2>Set a new password</h2>
+      <p>At least 6 characters.</p>
+      <form id="reset-form" novalidate>
+        <label for="password">New password</label>
+        <input id="password" type="password" autocomplete="new-password" minlength="6" required />
+        <label for="confirm">Repeat it</label>
+        <input id="confirm" type="password" autocomplete="new-password" minlength="6" required />
+        <button class="btn" type="submit" id="save">Save password</button>
+        <p class="error" id="reset-error" role="alert"></p>
+      </form>
+    </section>
+
+    <section id="reset-done" hidden>
+      <h2>Password updated</h2>
+      <p>Open fork'd and sign in with your new password.</p>
+      <a class="btn" href="seasonalkitchen://">Open fork'd</a>
+    </section>
+
+    <section id="expired" hidden>
+      <h2>This link has expired</h2>
+      <p>Links work once and only for a limited time. Request a new one from the sign-in screen in fork'd.</p>
+    </section>
+
+    <section id="nothing" hidden>
+      <h2>Nothing to do here</h2>
+      <p>This page opens from the links in fork'd emails. Looking for help? See <a href="support.html">support</a>.</p>
+    </section>
+
+    <p class="small">Fork'd · <a href="support.html">support</a> · <a href="privacy.html">privacy</a></p>
+  </div>
+
+  <script>
+    (function () {
+      var SUPABASE_URL = 'https://jepgbgqtmyhmpccgerlt.supabase.co';
+      var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImplcGdiZ3F0bXlobXBjY2dlcmx0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUyOTkxMTQsImV4cCI6MjA5MDg3NTExNH0.nVwqOzss4NGoxvMsZR3y78IwVrQJ-ZFYlyjwaLxTyd0';
+
+      var params = new URLSearchParams(window.location.hash.slice(1));
+      // Keep tokens out of the address bar, history and any screenshot.
+      if (window.location.hash) history.replaceState(null, '', window.location.pathname);
+
+      function show(id) { document.getElementById(id).hidden = false; }
+
+      if (params.get('error') || params.get('error_code')) return show('expired');
+
+      var token = params.get('access_token');
+      var type = params.get('type');
+      if (!token) return show('nothing');
+      if (type !== 'recovery') return show('confirmed');
+
+      show('reset');
+      var form = document.getElementById('reset-form');
+      var errorEl = document.getElementById('reset-error');
+      var saveBtn = document.getElementById('save');
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var password = document.getElementById('password').value;
+        var confirm = document.getElementById('confirm').value;
+        errorEl.textContent = '';
+        if (password.length < 6) { errorEl.textContent = 'Use at least 6 characters.'; return; }
+        if (password !== confirm) { errorEl.textContent = "The two passwords don't match."; return; }
+
+        saveBtn.disabled = true;
+        fetch(SUPABASE_URL + '/auth/v1/user', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            apikey: SUPABASE_ANON_KEY,
+            Authorization: 'Bearer ' + token,
+          },
+          body: JSON.stringify({ password: password }),
+        })
+          .then(function (res) {
+            if (res.ok) {
+              document.getElementById('reset').hidden = true;
+              show('reset-done');
+              return;
+            }
+            return res.json().catch(function () { return {}; }).then(function (body) {
+              if (res.status === 401 || res.status === 403) {
+                document.getElementById('reset').hidden = true;
+                return show('expired');
+              }
+              errorEl.textContent = (body && (body.msg || body.message)) || "Couldn't save that. Try again.";
+              saveBtn.disabled = false;
+            });
+          })
+          .catch(function () {
+            errorEl.textContent = 'No connection. Try again.';
+            saveBtn.disabled = false;
+          });
+      });
+    })();
+  </script>
+</body>
+</html>
