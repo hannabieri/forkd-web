@@ -170,6 +170,12 @@
             if (res.ok) {
               document.getElementById('reset').hidden = true;
               show('reset-done');
+              // A reset should end every existing session for the account (other devices, old installs).
+              // Best-effort: the password is already changed, so a failure here changes nothing for the user.
+              fetch(SUPABASE_URL + '/auth/v1/logout?scope=global', {
+                method: 'POST',
+                headers: { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + token },
+              }).catch(function () {});
               return;
             }
             return res.json().catch(function () { return {}; }).then(function (body) {
